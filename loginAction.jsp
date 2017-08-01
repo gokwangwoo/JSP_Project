@@ -19,9 +19,26 @@
 </head>
 <body>
 	<%
+		//이제 로그인한 유저는 로그인 화면이나 회원가입 화면에 들어가지 못하게 제작
+		String userID = null;
+		if(session.getAttribute("userID")!= null){
+			//userID가 null이 아니다 즉 로그인에 성공한 계정인 경우
+			//session으로 ID값을 넘겨준다.
+			userID = (String)session.getAttribute("userID");
+		}
+		if(userID != null){
+			PrintWriter script = response.getWriter();
+			script.println("<script>"); //유동적으로 script가 되게 한다.
+			script.println("alert('이미 로그인 되어있습니다.')");
+			script.println("location.href = 'main.jsp'");//main.jsp로 돌려보내는 것이다.
+			script.println("</script>");
+		}//이미 로그인한 사람은 다시 로그인 할 수 없게 만들고
 		UserDAO userDAO = new UserDAO();
 		int result = userDAO.login(user.getUserID(), user.getUserPassword());
 		if(result == 1){
+			//로그인 성공에 대한 session 관리를 해야 한다.
+			session.setAttribute("userID", user.getUserID());
+			//해당 회원의 ID값을 넣어준다.
 			PrintWriter script = response.getWriter();
 			script.println("<script>"); //유동적으로 script가 되게 한다.
 			script.println("location.href = 'main.jsp'");
