@@ -23,6 +23,19 @@
 </head>
 <body>
 	<%
+		String userID = null;
+		if(session.getAttribute("userID")!= null){
+				//userID가 null이 아니다 즉 로그인에 성공한 계정인 경우
+				//session으로 ID값을 넘겨준다.
+				userID = (String)session.getAttribute("userID");
+			}
+			if(userID != null){
+			PrintWriter script = response.getWriter();
+			script.println("<script>"); //유동적으로 script가 되게 한다.
+			script.println("alert('이미 로그인 되어있습니다.')");
+			script.println("location.href = 'main.jsp'");//main.jsp location하이퍼 링크를 통해 보낸다.
+			script.println("</script>");
+	}
 		//여기서 제대론 된 이자들 ID나 password등이 입력되지 안으면 null이 오므로
 		//if문으로 처리해 준다.
 		if(user.getUserID() == null || user.getUserPassword() == null || user.getUserName() == null || user.getUserGender() == null || user.getUserEmail() == null){
@@ -35,6 +48,8 @@
 			UserDAO userDAO = new UserDAO();
 			int result = userDAO.join(user);
 			if(result == 1){ //result갯수는 join.jsp에 executeUpdate되면서 올라온 인자으 갯수이니1개라도 올아오면 잘 된것이므로 result==1이 된것이다.
+				session.setAttribute("userID", user.getUserID());
+				//로그인 성공후 session을 관리하게 해야한다.
 				PrintWriter script = response.getWriter();
 				script.println("<script>"); 
 				//script.println("location.href = 'main.jsp'");
