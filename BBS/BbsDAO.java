@@ -117,7 +117,7 @@ public class BbsDAO {
 	//페이지를 10개씩 표시하는데 게시물이 10개 밖에 없다면 다음 화면이 존재하지 않을 것이다.
 	//그걸 알려줘야한다.
 	public boolean nextPage(int pageNumber) {
-		String SQL = "SELECT * FROM bbs WHERE bbsID < ? AND bbsAvailable =1 ORDER BY bbsID DESC LIMIT 10";
+		String SQL = "SELECT * FROM bbs WHERE bbsID < ? AND bbsAvailable = 1";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL); 
 			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);
@@ -131,5 +131,34 @@ public class BbsDAO {
 		}
 		
 		return false; //뽑아온 정보를 보여준다.
+	}
+	
+	//이제 하나의 게시판 글을 가져오는 코드를 만들어보자
+	public Bbs getBbs(int bbsID) {
+		//위에서 긁어 왔음
+		String SQL = "SELECT * FROM BBS WHERE BBSID = ? "; //특정 ID와 같으면 값을 뽑아오게 만들려고
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL); 
+			pstmt.setInt(1, bbsID);
+			rs = pstmt.executeQuery(); 
+			if(rs.next()) {
+				//위에서 긁어 왔음
+				Bbs bbs = new Bbs();
+				bbs.setBbsID(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5));
+				bbs.setBbsAvailable(rs.getInt(6));
+				return bbs;
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null; //해당 글이 존재하지 않으면 null을 반환 
+	
 	}
 }
