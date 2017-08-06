@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter" %> <%--java.io.PrintWriter를 넣으면 script를 쓸 수 있다. --%>
+<%@ page import="bbs.BbsDAO" %>
+<%@ page import="bbs.Bbs"%>
+<%@ page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +11,14 @@
 <meta name="viewport" content="width=device-width", initial-scale="1">
 <link rel="stylesheet" href="css/bootstrap.css">
 <title>JSP 게시판 웹사이트</title>
+<style type="text/css">
+ <%--이제 게시판 글이 검은색으로 나오게 처리 --%>
+	a, a:hover{
+		color: #000000;
+		text-decoration: none;
+	}
+
+</style>
 </head>
 <body>
 	<%
@@ -17,7 +28,12 @@
 		}
 		//로그인을 한 사람이면 session값이 있을 것이고
 		//로그인 하지 않은 사람은 null값이 담길 것이다.
-	
+		
+		//기본 페이지 넘버는 1
+		int pageNumber = 1;
+		if(request.getParameter("pageNumber") != null){
+			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+		}
 	%>
 	<nav class="navbar navbar-default">
 		<div class="navbar-header">
@@ -88,14 +104,42 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr><%-- 예시 데이터를 넣어준다. --%>
-						<td>1</td>
-						<td>안녕하세요.</td>
-						<td>홍길동</td>
-						<td>2017-08-01</td>
+				 <%
+						BbsDAO bbsDAO = new BbsDAO();
+						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+						for(int i = 0; i < list.size(); i++){
+												
+					%>
+					
+					<tr>
+						<td><%= list.get(i).getBbsID() %></td>
+						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsTitle() %>"> <%= list.get(i).getBbsTitle() %></a></td>
+						<td><%= list.get(i).getUserID() %></td>
+						<td><%= list.get(i).getBbsDate().substring(0, 11) + list.get(i).getBbsDate().substring(11, 13) + "시" + list.get(i).getBbsDate().substring(14, 16) + "분" %></td>			
 					</tr>
+						
+					<%
+						}
+					%>
+					
 				</tbody>
 			</table>
+			<%-- 이제 테이블 아래에 다음 이전을 본 수 있는 걸 만들어 보자 --%>
+			<%
+				if(pageNumber != 1){
+			%>
+				<a href="bbs.jsp?pageNumber=<%=pageNumber - 1%>" class="btn btn-success btn-arrow-left">이전</a>
+			
+			<% 		
+				}if(bbsDAO.nextPage(pageNumber + 1)){
+					
+				
+			%>
+				<a href="bbs.jsp?pageNumber=<%=pageNumber + 1%>" class="btn btn-success btn-arrow-left">다음</a>
+			<%
+				}
+			
+			%>
 			<%-- write.jsp는 글을 작성할 수 있는 페이지로 보내는 것 --%>
 			<%-- 글 쓰기 버튼이다. --%>
 			<a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
