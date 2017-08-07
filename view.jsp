@@ -103,7 +103,8 @@
 						<tr> <%-- 한줄 씩만 나오게 tr테그로 감싸준다. --%>
 							<%-- 20%는 비고이다. --%>
 							<td style="width: 20%;">글 제목</td>
-							<td colspan="2"><%= bbs.getBbsTitle() %></td>
+							<td colspan="2"><%= bbs.getBbsTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></td>
+							
 						</tr>
 						<tr> 
 							<td>글 제목</td>
@@ -115,7 +116,8 @@
 						</tr>
 						<tr> 
 							<td>내용</td>
-							<td colspan="2" style="min-height: 200px; text-align: left;"><%= bbs.getBbsContent() %></td>
+							<%-- 공백이나 기타 특수문자 처리를 위해 replaceAll이라는 함수를 쓴다. &nbps나 &lt같은 건 html 문자이다. --%>
+							<td colspan="2" style="min-height: 200px; text-align: left;"><%= bbs.getBbsContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></td>
 						</tr>
 					</tbody>
 				</table>
