@@ -161,4 +161,38 @@ public class BbsDAO {
 		return null; //해당 글이 존재하지 않으면 null을 반환 
 	
 	}
+	//이제 수정하는 기능을 넣어 보겠습니다.
+	//매개 변수로 들어온 변수를 바꿔치기 해주겠다는 의미
+	//write와 비슷하지 위의 write의 기능을 가져오자
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		String SQL = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?"; //특정한 ID에 해당하는 제목과 내용을 바꿔준다는 의미
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL); //연결된 객체를 통해 SQL문을 실행 준비단계.
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, bbsContent);
+			pstmt.setInt(3, bbsID);
+			return pstmt.executeUpdate(); //성공적으로 실행했다면 0이상 값 반환
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return -1; 
+	}
+	//이제 삭제를 만들어 보자
+	public int delete(int bbsID) {
+		//위에걸 그대로 복사 후 이용
+		String SQL = "UPDATE BBS SET bbsAvailable = 0 WHERE bbsID = ?"; //bbsAvailable을 0으로 바꿔줘서 글을 삭제한다.
+		//삭제 되도 글의 내뇽은 남음
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL); //연결된 객체를 통해 SQL문을 실행 준비단계.
+			pstmt.setInt(1, bbsID); //avaiable을 0으로 바꾼다는 의미
+			return pstmt.executeUpdate(); //성공적으로 실행했다면 0이상 값 반환
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return -1; 
+	}
 }
