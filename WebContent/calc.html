@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>
+		<form action="calc" method="post">
+			<div>
+				<label>x:</label>
+				<input name="x" type="text" >
+			</div>
+			<div>
+				<label>y:</label>
+				<textarea name="y" type="text"></textarea>
+			</div>
+			<div>
+				<input type="submit" name="operator" value="덧셈" />
+				<input type="submit" name="operator" value="뺄샘" />
+				<!-- 둘다 똑같은 name=operator으로 한 이유는 둘다 한 번에 눌루지 않으므로  즉, 덧셈을 누르면 덧셈만 뺄샘을 누르면 뻴샘만 되므로 -->
+			</div>
+			<div>
+				결과 : 0
+			</div>
+		</form>
+	</div>
+</body>
+</html>
