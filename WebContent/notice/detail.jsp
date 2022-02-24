@@ -1,40 +1,7 @@
-<%@page import="java.util.Date"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<%
 
-int id = Integer.parseInt(request.getParameter("id"));
-
-String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
-String sql = "SELECT * FROM NOTICE WHERE ID=?"; //특정 ID의 값만 가져오게 WHERE ID=? 을 붙인다.
-
-Class.forName("oracle.jdbc.driver.OracleDriver");
-Connection con = DriverManager.getConnection(url, "NEWLEC","1234");
-PreparedStatement st = con.prepareStatement(sql); //prepared Statement를 이용해서 ? 쿼리문에 값을 넣어주자
-st.setInt(1, id);
-
-ResultSet rs = st.executeQuery(); //위에서 prepared를 이용해 미리 준비한 sql문을 사용하므로 rs의 쿼리문은 빼준다.
-
-//이제 JSP MVC model1구조에 맞게 Model + Controller를 여기 코드 상위에 만들어주게 Model을 만들자
-rs.next();
-
-//이게 바로 model 변수를 만든 것이다.
-String title = rs.getString("TITLE");
-Date regdate = rs.getDate("REGDATE");
-String writerId = rs.getString("WRITER_ID");
-String hit = rs.getString("HIT");
-String files = rs.getString("FILES");
-String content = rs.getString("CONTENT");
-
-rs.close();
-st.close();
-con.close();
-%>
 
 <!DOCTYPE html>
 <html>
@@ -185,24 +152,24 @@ con.close();
 							<tbody>
 								<tr>
 									<th>제목</th>
-									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%=title %></td>
+									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%=request.getAttribute("title")%></td>
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3"><%=regdate %></td>
+									<td class="text-align-left text-indent" colspan="3"><%=request.getAttribute("regdate") %></td>
 								</tr>
 								<tr>
 									<th>작성자</th>
-									<td><%=writerId %></td>
+									<td><%=request.getAttribute("writerId") %></td>
 									<th>조회수</th>
-									<td><%=hit %></td>
+									<td><%=request.getAttribute("hit") %></td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3"><%=files %></td>
+									<td colspan="3"><%=request.getAttribute("files") %></td>
 								</tr>
 								<tr class="content">
-									<td colspan="4"><%=content %></td>
+									<td colspan="4"><%=request.getAttribute("content") %></td>
 								</tr>
 							</tbody>
 						</table>

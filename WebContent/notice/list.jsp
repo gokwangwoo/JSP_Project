@@ -193,8 +193,8 @@ ResultSet rs = st.executeQuery(sql);
 					<% while(rs.next()){%>
 											
 					<tr>
-						<td><%=rs.getInt("ID")%></td>                 <!-- 쿼리 스트링 전달을 위해 ?가 들어갔다 -->
-						<td class="title indent text-align-left"><a href="detail.jsp?id=<%=rs.getInt("ID")%>"><%=rs.getString("TITLE") %></a></td>
+						<td><%=rs.getInt("ID")%></td>                 <!-- 쿼리 스트링 전달을 위해 ?가 들어갔다 --><!-- detail.jsp에서 detail로 바뀜 Controller의 주소로 -->
+						<td class="title indent text-align-left"><a href="detail?id=<%=rs.getInt("ID")%>"><%=rs.getString("TITLE") %></a></td>
 						<td><%=rs.getString("WRITER_ID") %></td>
 						<td>
 							<%=rs.getDate("REGDATE") %>	
