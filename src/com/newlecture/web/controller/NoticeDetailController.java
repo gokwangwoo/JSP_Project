@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.newlecture.web.entity.Notice;
+
 @WebServlet("/notice/detail")
 
 public class NoticeDetailController extends HttpServlet {
@@ -41,13 +43,30 @@ public class NoticeDetailController extends HttpServlet {
 			String hit = rs.getString("HIT");
 			String files = rs.getString("FILES");
 			String content = rs.getString("CONTENT");
-
+			
+			//이제 위에서 받아온 string, Date값들을  우리가 com.newlec.web.entity에서 만든 Notice 객체에 넘겨줘야 합니다.
+			//new로 만들 생성자는 기본 생성자가 아니고 아래에 위의 title, regdate등을 채울 생성자 public Notice(int id, String title ...) 이렇게 된 생성자
+			Notice notice = new Notice(
+					id,
+					title,
+					regdate,
+					writerId,
+					hit,
+					files,
+					content
+					);//순서 잘 들어가야 한다.
+			
+			request.setAttribute("n", notice);//<--이제 n 을 이용해서 화면에 출력해 줄 수 있다. detail.jsp에서 사용
+			
+			/*
 			request.setAttribute("title", title);
 			request.setAttribute("regdate", regdate);
 			request.setAttribute("writerId", writerId);
 			request.setAttribute("hit", hit);
 			request.setAttribute("files", files);
 			request.setAttribute("content", content);
+			*/
+			
 			
 			
 			rs.close();
